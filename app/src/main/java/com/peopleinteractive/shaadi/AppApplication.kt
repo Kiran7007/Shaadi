@@ -1,13 +1,13 @@
 package com.peopleinteractive.shaadi
 
-import android.app.Application
+import androidx.multidex.MultiDexApplication
 import com.peopleinteractive.shaadi.di.databaseModules
 import com.peopleinteractive.shaadi.di.remoteModules
 import com.peopleinteractive.shaadi.di.repositoryModules
 import com.peopleinteractive.shaadi.di.viewModelModules
 import org.koin.android.ext.android.startKoin
 
-class AppApplication : Application() {
+class AppApplication : MultiDexApplication() {
 
     override fun onCreate() {
         super.onCreate()

@@ -1,9 +1,12 @@
 package com.peopleinteractive.shaadi.ui.people
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.peopleinteractive.shaadi.data.Result
+import com.peopleinteractive.shaadi.data.db.entity.People
 import com.peopleinteractive.shaadi.data.repository.PeopleRepository
+import com.peopleinteractive.shaadi.util.Mapper
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -12,6 +15,10 @@ import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.launch
 
 class PeopleViewModel(private val repository: PeopleRepository) : ViewModel() {
+
+    companion object {
+        private val TAG = PeopleViewModel::class.java.simpleName
+    }
 
     val peopleIntent = Channel<PeopleIntent>(Channel.UNLIMITED)
 
@@ -33,7 +40,7 @@ class PeopleViewModel(private val repository: PeopleRepository) : ViewModel() {
         }
     }
 
-    fun fetchDataFromLocal() {
+    private fun fetchDataFromLocal() {
         viewModelScope.launch {
             repository.fetchDataFromDB().collect {
                 _state.value = PeopleState.PeopleData(it)
@@ -41,18 +48,31 @@ class PeopleViewModel(private val repository: PeopleRepository) : ViewModel() {
         }
     }
 
-
     private fun requestPeoples() {
         viewModelScope.launch {
-            _state.value = PeopleState.Loading
-            when (repository.fetchPeoples()) {
-                is Result.Success -> {
-                    _state.value = PeopleState.PeopleData(emptyList())
+            try {
+                _state.value = PeopleState.Loading(true)
+                when (val fetchPeoples = repository.fetchPeoples()) {
+                    is Result.Success -> {
+                        _state.value = PeopleState.PeopleData(fetchPeoples.data)
+                    }
+                    is Result.Error -> {
+                        _state.value = PeopleState.Error(fetchPeoples.exception.message)
+                    }
                 }
-                is Result.Error -> {
-                    _state.value = PeopleState.Error("")
-                }
+                _state.value = PeopleState.Loading(false)
+            } catch (e: Exception) {
+                Log.d(TAG, "Error while fetching the data")
+                _state.value = PeopleState.Loading(false)
             }
         }
+    }
+
+    fun accept(people: People) {
+        _state.value = PeopleState.Error("Accepted : ${Mapper.getPersonName(people)}")
+    }
+
+    fun decline(people: People) {
+        _state.value = PeopleState.Error("Declined : ${Mapper.getPersonName(people)}")
     }
 }

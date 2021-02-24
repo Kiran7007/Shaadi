@@ -1,23 +1,26 @@
 package com.peopleinteractive.shaadi.data.repository
 
+import android.util.Log
 import com.peopleinteractive.shaadi.data.Result
 import com.peopleinteractive.shaadi.data.api.ApiService
 import com.peopleinteractive.shaadi.data.db.dao.PeopleDao
 import com.peopleinteractive.shaadi.data.db.entity.People
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.withContext
 
 class PeopleRepositoryImpl(
-    private val apiservice: ApiService
-    , private val peopleDao: PeopleDao
+    private val apiService: ApiService,
+    private val peopleDao: PeopleDao
 ) : PeopleRepository {
+
+    companion object {
+        private val TAG = PeopleRepository::class.java.simpleName
+    }
 
     override suspend fun fetchPeoples(): Result<List<People>> {
         return try {
-            val response = withContext(Dispatchers.IO) { apiservice.fetchPeoples() }
+            val response = apiService.fetchPeoples()
+            Log.d(TAG, "Response : ${response.body()}")
             if (response.isSuccessful) {
-                Result.Success(emptyList())
+                Result.Success(response.body()?.peoplesList ?: emptyList())
             } else {
                 Result.Error(RuntimeException(response.message()))
             }
@@ -26,5 +29,5 @@ class PeopleRepositoryImpl(
         }
     }
 
-    override suspend fun fetchDataFromDB()= peopleDao.fetchPeoples()
+    override suspend fun fetchDataFromDB() = peopleDao.fetchPeoples()
 }

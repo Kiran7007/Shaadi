@@ -1,3 +1,5 @@
 <resources>
-    <string name="app_name">Shaadi.com</string>
+    <string name="app_name">Shaadi</string>
+    <string name="decline">Decline</string>
+    <string name="accept">Accept</string>
 </resources>

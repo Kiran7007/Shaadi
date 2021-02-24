@@ -1,6 +1,9 @@
 package com.peopleinteractive.shaadi.data.model
 
+import com.peopleinteractive.shaadi.data.db.entity.People
+import com.squareup.moshi.Json
+
 data class PeopleResponse(
-    val id: String,
-    val name: String
+    @Json(name = "results")
+    val peoplesList: List<People>
 )

@@ -1,7 +1,6 @@
 package com.peopleinteractive.shaadi.di
 
 import androidx.room.Room
-import com.google.gson.GsonBuilder
 import com.peopleinteractive.shaadi.BuildConfig
 import com.peopleinteractive.shaadi.data.api.ApiService
 import com.peopleinteractive.shaadi.data.db.AppDatabase
@@ -9,31 +8,24 @@ import com.peopleinteractive.shaadi.data.repository.PeopleRepository
 import com.peopleinteractive.shaadi.data.repository.PeopleRepositoryImpl
 import com.peopleinteractive.shaadi.ui.people.PeopleViewModel
 import com.peopleinteractive.shaadi.util.DATABASE_NAME
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import org.koin.androidx.viewmodel.ext.koin.viewModel
 import org.koin.dsl.module.module
 import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.converter.moshi.MoshiConverterFactory
 
 val remoteModules = module {
     single {
-        OkHttpClient.Builder().apply {
-            addInterceptor(
-                HttpLoggingInterceptor().apply
-                {
-                    if (BuildConfig.DEBUG) {
-                        level = HttpLoggingInterceptor.Level.BODY
-                    }
-                })
-        }.build()
+        Moshi.Builder()
+            .add(KotlinJsonAdapterFactory())
+            .build()
     }
 
     single {
         Retrofit.Builder()
             .baseUrl(BuildConfig.BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create(GsonBuilder().create()))
-            .client(get())
+            .addConverterFactory(MoshiConverterFactory.create(get()))
             .build()
     }
 
