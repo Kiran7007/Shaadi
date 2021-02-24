@@ -5,7 +5,11 @@ import com.peopleinteractive.shaadi.data.db.entity.People
 import kotlinx.coroutines.flow.Flow
 
 interface PeopleRepository {
-    suspend fun fetchPeoples(): Result<List<People>>
+    suspend fun fetchRemotePeoples(): Result<List<People>>
 
-    suspend fun fetchDataFromDB(): Flow<List<People>>
+    fun fetchDataFromDB(): Flow<List<People>>
+
+    suspend fun update(people: People)
+
+    suspend fun insert(data: List<People>): LongArray
 }

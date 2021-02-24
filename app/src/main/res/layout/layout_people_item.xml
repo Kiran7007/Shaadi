@@ -12,6 +12,8 @@
             type="com.peopleinteractive.shaadi.data.db.entity.People" />
 
         <import type="com.peopleinteractive.shaadi.util.Mapper" />
+
+        <import type="android.view.View" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -38,10 +40,10 @@
                     android:id="@+id/iv_profile"
                     android:layout_width="match_parent"
                     android:layout_height="120dp"
-                    android:src="@mipmap/ic_launcher"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:profileImage="@{people.picture.medium}" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/tv_name"
@@ -73,6 +75,21 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tv_details" />
 
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tv_connected"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center"
+                    android:padding="10dp"
+                    android:text="@{Mapper.getUpdatedStatus(people)}"
+                    android:textColor="@color/purple_700"
+                    android:textSize="18sp"
+                    android:visibility="@{people.connection.isUpdated ? View.VISIBLE : View.GONE}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_address" />
+
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/tv_decline"
                     android:layout_width="wrap_content"
@@ -80,6 +97,7 @@
                     android:layout_marginTop="10dp"
                     android:onClick="@{(view)->viewmodel.decline(people)}"
                     android:text="@string/decline"
+                    android:visibility="@{people.connection.isUpdated ? View.GONE : View.VISIBLE}"
                     app:layout_constraintHorizontal_chainStyle="spread"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toLeftOf="@id/tv_accept"
@@ -92,6 +110,7 @@
                     android:layout_marginTop="10dp"
                     android:onClick="@{(view) -> viewmodel.accept(people)}"
                     android:text="@string/accept"
+                    android:visibility="@{people.connection.isUpdated ? View.GONE : View.VISIBLE}"
                     app:layout_constraintHorizontal_chainStyle="spread"
                     app:layout_constraintLeft_toRightOf="@id/tv_decline"
                     app:layout_constraintRight_toRightOf="parent"

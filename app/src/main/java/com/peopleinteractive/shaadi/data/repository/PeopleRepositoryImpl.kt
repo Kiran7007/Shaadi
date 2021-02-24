@@ -1,6 +1,5 @@
 package com.peopleinteractive.shaadi.data.repository
 
-import android.util.Log
 import com.peopleinteractive.shaadi.data.Result
 import com.peopleinteractive.shaadi.data.api.ApiService
 import com.peopleinteractive.shaadi.data.db.dao.PeopleDao
@@ -15,10 +14,9 @@ class PeopleRepositoryImpl(
         private val TAG = PeopleRepository::class.java.simpleName
     }
 
-    override suspend fun fetchPeoples(): Result<List<People>> {
+    override suspend fun fetchRemotePeoples(): Result<List<People>> {
         return try {
             val response = apiService.fetchPeoples()
-            Log.d(TAG, "Response : ${response.body()}")
             if (response.isSuccessful) {
                 Result.Success(response.body()?.peoplesList ?: emptyList())
             } else {
@@ -29,5 +27,9 @@ class PeopleRepositoryImpl(
         }
     }
 
-    override suspend fun fetchDataFromDB() = peopleDao.fetchPeoples()
+    override fun fetchDataFromDB() = peopleDao.fetchPeoples()
+
+    override suspend fun update(people: People) = peopleDao.update(people)
+
+    override suspend fun insert(data: List<People>) = peopleDao.insert(data)
 }

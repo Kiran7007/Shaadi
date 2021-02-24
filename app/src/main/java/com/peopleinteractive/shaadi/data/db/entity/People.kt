@@ -1,9 +1,6 @@
 package com.peopleinteractive.shaadi.data.db.entity
 
-import androidx.room.ColumnInfo
-import androidx.room.Embedded
-import androidx.room.Entity
-import androidx.room.PrimaryKey
+import androidx.room.*
 import com.squareup.moshi.Json
 
 @Entity(tableName = "people")
@@ -30,6 +27,10 @@ data class People(
     @Json(name = "location")
     val location: Location,
 
+    @Embedded
+    @Transient
+    var connection: Connection = Connection(false, "", 0),
+
     @ColumnInfo(name = "gender")
     @Json(name = "gender")
     val gender: String,
@@ -40,7 +41,7 @@ data class People(
 
     @ColumnInfo(name = "cell")
     @Json(name = "cell")
-    val cell: String
+    val cell: String,
 )
 
 data class Name(
@@ -97,4 +98,15 @@ data class Location(
     @ColumnInfo(name = "postcode")
     @Json(name = "postcode")
     val postcode: String
+)
+
+data class Connection(
+    @ColumnInfo(name = "isUpdated")
+    var isUpdated: Boolean,
+
+    @ColumnInfo(name = "connectionStatus")
+    var connectionStatus: String,
+
+    @ColumnInfo(name = "updatedAt")
+    var updatedAt: Long
 )
