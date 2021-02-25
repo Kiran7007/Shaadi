@@ -7,7 +7,9 @@ import com.bumptech.glide.request.RequestOptions
 import com.peopleinteractive.shaadi.R
 import com.peopleinteractive.shaadi.data.db.entity.People
 
-
+/**
+ * Mapper provides modified data to the view.
+ */
 object Mapper {
 
     @JvmStatic

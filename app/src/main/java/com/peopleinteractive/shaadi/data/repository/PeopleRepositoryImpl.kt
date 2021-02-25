@@ -5,6 +5,9 @@ import com.peopleinteractive.shaadi.data.api.ApiService
 import com.peopleinteractive.shaadi.data.db.dao.PeopleDao
 import com.peopleinteractive.shaadi.data.db.entity.People
 
+/**
+ * PeopleRepositoryImpl responsible for doing database and network transactions.
+ */
 class PeopleRepositoryImpl(
     private val apiService: ApiService,
     private val peopleDao: PeopleDao

@@ -4,6 +4,9 @@ import androidx.room.*
 import com.peopleinteractive.shaadi.data.db.entity.People
 import kotlinx.coroutines.flow.Flow
 
+/**
+ * PeopleDao manages all the database queries.
+ */
 @Dao
 interface PeopleDao {
 

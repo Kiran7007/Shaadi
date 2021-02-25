@@ -1,7 +1,6 @@
 package com.peopleinteractive.shaadi.ui.people
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,14 +15,24 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
+/**
+ * PeopleFragment shows the people list.
+ */
 class PeopleFragment : Fragment() {
 
-    companion object {
-        private val TAG = PeopleFragment::class.java.simpleName
-    }
-
+    /**
+     * PeopleViewModel injected bu dependency injection.
+     */
     private val viewModel by viewModel<PeopleViewModel>()
+
+    /**
+     * Binder to bind data with the view.
+     */
     private lateinit var binding: PeopleFragmentBinding
+
+    /**
+     * Converts the simple data into view and set to the recycler view.
+     */
     private lateinit var adapter: PeopleAdapter
 
     override fun onCreateView(
@@ -41,20 +50,29 @@ class PeopleFragment : Fragment() {
         observerState()
     }
 
+    /**
+     * Initialize the view.
+     */
+    private fun initView() {
+        adapter = PeopleAdapter(viewModel)
+        binding.recyclerView.adapter = adapter
+    }
+
+    /**
+     * Observes the peoples data and set to the recycler view.
+     */
     private fun observerPeoples() {
         viewModel.peoples.observe(viewLifecycleOwner, Observer<List<People>> {
-            if(!it.isNullOrEmpty()){
+            if (!it.isNullOrEmpty()) {
                 binding.tvEmpty.visibility = View.GONE
             }
             adapter.submitList(it)
         })
     }
 
-    private fun initView() {
-        adapter = PeopleAdapter(viewModel)
-        binding.recyclerView.adapter = adapter
-    }
-
+    /**
+     * Observe the states.
+     */
     private fun observerState() {
         lifecycleScope.launch {
             viewModel.state.collect {
@@ -63,7 +81,6 @@ class PeopleFragment : Fragment() {
                         viewModel.peopleIntent.send(PeopleIntent.FetchLocalPeople)
                     }
                     is PeopleState.Loading -> {
-                        showLoading(it.isLoading)
                     }
                     is PeopleState.Error -> {
                         it.message?.let { message -> shoToast(message) }
@@ -73,14 +90,9 @@ class PeopleFragment : Fragment() {
         }
     }
 
-    private fun showLoading(isLoading: Boolean) {
-        if (isLoading) {
-            Log.d(TAG, "Showing progress")
-        } else {
-            Log.d(TAG, "Dismiss progress")
-        }
-    }
-
+    /**
+     * Shows message.
+     */
     private fun shoToast(message: String) {
         Toast.makeText(requireActivity(), message, Toast.LENGTH_SHORT).show()
     }

@@ -9,6 +9,9 @@ import com.peopleinteractive.shaadi.data.db.entity.People
 import com.peopleinteractive.shaadi.databinding.LayoutPeopleItemBinding
 import com.peopleinteractive.shaadi.ui.people.PeopleViewModel
 
+/**
+ * PeopleAdapter is responsible to covert people data into view by binding people model with the view.
+ */
 class PeopleAdapter(private val viewModel: PeopleViewModel) :
     ListAdapter<People, PeopleAdapter.ViewHolder>(PeopleDiffCallBack()) {
 
@@ -17,8 +20,15 @@ class PeopleAdapter(private val viewModel: PeopleViewModel) :
     override fun onBindViewHolder(holder: ViewHolder, position: Int) =
         holder.bind(getItem(position), viewModel)
 
-    class ViewHolder(val binding: LayoutPeopleItemBinding) : RecyclerView.ViewHolder(binding.root) {
+    /**
+     * ViewHolder binds each item to the view, the object of this class recycles.
+     */
+    class ViewHolder(private val binding: LayoutPeopleItemBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
+        /**
+         * Bind the people model with the view.
+         */
         fun bind(item: People?, viewModel: PeopleViewModel) {
             item?.let {
                 binding.people = item
@@ -26,7 +36,11 @@ class PeopleAdapter(private val viewModel: PeopleViewModel) :
             }
         }
 
+        /**
+         * Methods and variables in companion object are static.
+         */
         companion object {
+            // static method to create the instance of view holder.
             fun from(parent: ViewGroup): ViewHolder {
                 val binding = LayoutPeopleItemBinding.inflate(
                     LayoutInflater.from(parent.context),
@@ -39,6 +53,9 @@ class PeopleAdapter(private val viewModel: PeopleViewModel) :
     }
 }
 
+/**
+ * PeopleDiffCallBack replace only those items in the list which is updated.
+ */
 class PeopleDiffCallBack : DiffUtil.ItemCallback<People>() {
     override fun areItemsTheSame(oldItem: People, newItem: People) = oldItem.email == newItem.email
     override fun areContentsTheSame(oldItem: People, newItem: People) = oldItem == newItem

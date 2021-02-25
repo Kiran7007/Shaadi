@@ -6,6 +6,9 @@ import com.peopleinteractive.shaadi.data.db.dao.PeopleDao
 import com.peopleinteractive.shaadi.data.db.entity.People
 import com.peopleinteractive.shaadi.util.DATABASE_VERSION
 
+/**
+ * AppDatabase manages all the database configuration and transaction.
+ */
 @Database(
     entities = [People::class],
     version = DATABASE_VERSION,

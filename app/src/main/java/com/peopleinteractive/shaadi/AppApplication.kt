@@ -12,6 +12,7 @@ class AppApplication : MultiDexApplication() {
     override fun onCreate() {
         super.onCreate()
 
+        // Configure the koin dependency injection.
         startKoin(
             this, listOf(
                 remoteModules,
