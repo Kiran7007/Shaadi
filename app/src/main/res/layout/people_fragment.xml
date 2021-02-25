@@ -19,5 +19,18 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:listitem="@layout/layout_people_item" />
 
+        <AutoCompleteTextView
+            android:id="@+id/tv_empty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/not_match_found_for_you"
+            android:textColor="@color/purple_700"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="@+id/recycler_view"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

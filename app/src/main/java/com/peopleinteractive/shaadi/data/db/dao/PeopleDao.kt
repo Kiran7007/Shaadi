@@ -13,7 +13,7 @@ interface PeopleDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(people: People): Long
 
-    @Query("SELECT * FROM people")
+    @Query("SELECT * FROM people ORDER BY first ASC, last ASC")
     fun fetchPeoples(): Flow<List<People>>
 
     @Update

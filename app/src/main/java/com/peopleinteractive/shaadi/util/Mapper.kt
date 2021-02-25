@@ -4,18 +4,27 @@ import android.widget.ImageView
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.peopleinteractive.shaadi.R
 import com.peopleinteractive.shaadi.data.db.entity.People
 
 
 object Mapper {
 
     @JvmStatic
-    fun getPersonName(people: People) =
-        "${people.name.title}. ${people.name.first} ${people.name.last}"
-
-    @JvmStatic
-    fun getPersonDetails(people: People) =
-        "${people.dob.age}, ${people.phone}, ${people.gender}"
+    fun getPersonName(people: People): String {
+        val gender = when {
+            people.gender.equals("male", true) -> {
+                "M - "
+            }
+            people.gender.equals("female", true) -> {
+                "F - "
+            }
+            else -> {
+                ""
+            }
+        }
+        return "${people.name.title.trim()}. ${people.name.first.trim()} ${people.name.last.trim()}\n($gender${people.dob.age})"
+    }
 
     @JvmStatic
     fun getPersonLocation(people: People) =
@@ -26,19 +35,24 @@ object Mapper {
         val isUpdate = people.connection.isUpdated
         if (isUpdate) {
             return if (people.connection.connectionStatus == ACCEPTED) {
-                "Accepted by you on ${DateUtil.getStandardTime(people.connection.updatedAt)}"
+                "Accepted on ${DateUtil.getStandardTime(people.connection.updatedAt)}"
             } else {
-                "Declined by you on ${DateUtil.getStandardTime(people.connection.updatedAt)}"
+                "Declined on ${DateUtil.getStandardTime(people.connection.updatedAt)}"
             }
         }
         return ""
     }
 
     @JvmStatic
-    @BindingAdapter("app:profileImage")
-    fun loadImage(view: ImageView, imageUrl: String?) {
+    @BindingAdapter("app:profileImage", "app:gender")
+    fun loadImage(view: ImageView, imageUrl: String?, gender: String) {
+        val drawable = when (gender) {
+            "male" -> R.drawable.groom
+            "female" -> R.drawable.bride
+            else -> R.mipmap.ic_launcher_round
+        }
         Glide.with(view.context)
-            .load(imageUrl).apply(RequestOptions().fitCenter())
+            .load(imageUrl).apply(RequestOptions().placeholder(drawable).fitCenter())
             .into(view)
     }
 }

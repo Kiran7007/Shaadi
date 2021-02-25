@@ -1,7 +1,9 @@
 package com.peopleinteractive.shaadi.ui.people
 
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.peopleinteractive.shaadi.data.Result
 import com.peopleinteractive.shaadi.data.db.entity.People
@@ -10,10 +12,7 @@ import com.peopleinteractive.shaadi.util.ACCEPTED
 import com.peopleinteractive.shaadi.util.DECLINED
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.consumeAsFlow
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -28,6 +27,8 @@ class PeopleViewModel(private val repository: PeopleRepository) : ViewModel() {
     private val _state = MutableStateFlow<PeopleState>(PeopleState.Idle)
     val state: StateFlow<PeopleState> get() = _state
 
+    val peoples: LiveData<List<People>> get() = repository.fetchDataFromDB().asLiveData()
+
     init {
         handleIntent()
     }
@@ -36,7 +37,7 @@ class PeopleViewModel(private val repository: PeopleRepository) : ViewModel() {
         viewModelScope.launch {
             peopleIntent.consumeAsFlow().collect {
                 when (it) {
-                    is PeopleIntent.FetchRemotePeople -> requestPeoples()
+                    is PeopleIntent.FetchRemotePeople -> fetchDataFromRemote()
                     is PeopleIntent.FetchLocalPeople -> fetchDataFromLocal()
                 }
             }
@@ -44,24 +45,21 @@ class PeopleViewModel(private val repository: PeopleRepository) : ViewModel() {
     }
 
     private fun fetchDataFromLocal() {
-        viewModelScope.launch {
-            repository.fetchDataFromDB().collect {
-                _state.value = PeopleState.PeopleData(it)
-            }
+        if (peoples.value.isNullOrEmpty()) {
+            fetchDataFromRemote()
         }
     }
 
-    private fun requestPeoples() {
+    private fun fetchDataFromRemote() {
         viewModelScope.launch {
             try {
                 _state.value = PeopleState.Loading(true)
                 when (val fetchPeoples = repository.fetchRemotePeoples()) {
                     is Result.Success -> {
                         withContext(Dispatchers.IO) { repository.insert(fetchPeoples.data) }
-                        _state.value = PeopleState.PeopleData(fetchPeoples.data)
                     }
                     is Result.Error -> {
-                        _state.value = PeopleState.Error(fetchPeoples.exception.message)
+                        _state.value = PeopleState.Error("Please check the network connection and try again")
                     }
                 }
                 _state.value = PeopleState.Loading(false)

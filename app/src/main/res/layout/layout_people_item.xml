@@ -23,9 +23,9 @@
         <androidx.cardview.widget.CardView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
+            android:layout_margin="20dp"
             app:cardCornerRadius="8dp"
-            app:cardElevation="6dp"
+            app:cardElevation="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -36,80 +36,89 @@
                 android:layout_height="wrap_content"
                 android:padding="20dp">
 
-                <androidx.appcompat.widget.AppCompatImageView
+                <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/iv_profile"
                     android:layout_width="match_parent"
                     android:layout_height="120dp"
+                    app:civ_border_color="@color/gray"
+                    app:civ_border_width="2dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:profileImage="@{people.picture.medium}" />
+                    app:gender="@{people.gender}"
+                    app:profileImage="@{people.picture.large}" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/tv_name"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="15dp"
+                    android:gravity="center_horizontal"
                     android:text="@{Mapper.getPersonName(people)}"
+                    android:textColor="@color/purple_700"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/iv_profile" />
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/tv_details"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:text="@{Mapper.getPersonDetails(people)}"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tv_name" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/tv_address"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
+                    android:textSize="16sp"
+                    android:gravity="center_horizontal"
                     android:text="@{Mapper.getPersonLocation(people)}"
+                    android:textColor="@color/black"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tv_details" />
+                    app:layout_constraintTop_toBottomOf="@id/tv_name" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/tv_connected"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="30dp"
                     android:gravity="center"
                     android:padding="10dp"
                     android:text="@{Mapper.getUpdatedStatus(people)}"
-                    android:textColor="@color/purple_700"
-                    android:textSize="18sp"
+                    android:textColor="@color/gray"
+                    android:textSize="16sp"
+                    android:background="@drawable/bg_message"
                     android:visibility="@{people.connection.isUpdated ? View.VISIBLE : View.GONE}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tv_address" />
 
-                <androidx.appcompat.widget.AppCompatButton
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/tv_decline"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="20dp"
+                    android:drawableTop="@drawable/ic_decline"
                     android:onClick="@{(view)->viewmodel.decline(people)}"
+                    android:padding="10dp"
                     android:text="@string/decline"
+                    android:textColor="@color/red"
+                    android:textSize="16sp"
                     android:visibility="@{people.connection.isUpdated ? View.GONE : View.VISIBLE}"
                     app:layout_constraintHorizontal_chainStyle="spread"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toLeftOf="@id/tv_accept"
                     app:layout_constraintTop_toBottomOf="@id/tv_address" />
 
-                <androidx.appcompat.widget.AppCompatButton
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/tv_accept"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="20dp"
+                    android:drawableTop="@drawable/ic_accept"
                     android:onClick="@{(view) -> viewmodel.accept(people)}"
+                    android:padding="10dp"
                     android:text="@string/accept"
+                    android:textColor="@color/green"
+                    android:textSize="16sp"
                     android:visibility="@{people.connection.isUpdated ? View.GONE : View.VISIBLE}"
                     app:layout_constraintHorizontal_chainStyle="spread"
                     app:layout_constraintLeft_toRightOf="@id/tv_decline"

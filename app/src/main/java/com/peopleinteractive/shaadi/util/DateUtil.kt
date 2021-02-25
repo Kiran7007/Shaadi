@@ -6,7 +6,7 @@ import java.util.*
 object DateUtil {
 
     fun getStandardTime(timeStamp: Long): String {
-        val sdf = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
+        val sdf = SimpleDateFormat("dd MMM yyyy, hh:mm a", Locale.getDefault())
         return sdf.format(timeStamp)
     }
 }
