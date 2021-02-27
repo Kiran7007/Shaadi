@@ -1,6 +1,12 @@
 # Shaadi
 This repository contains Shaadi app which is written that implements MVI architecture using Koin, Room, Coroutine, Retrofit, Flow, LiveData and Navigation Graph
 
+<p align="center">
+  <img src="https://github.com/Kiran7007/Shaadi/blob/master/screenshots/Screen_1.jpg" width="250">
+  <img src="https://github.com/Kiran7007/Shaadi/blob/master/screenshots/Screen_2.jpg" width="250">
+</p>
+<br>
+
 #### The app has following packages:
 
 1. **adapters**: It has all kind of adapters which can be use for many places.
