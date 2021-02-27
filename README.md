@@ -1,5 +1,5 @@
 # Shaadi
-This repository contains Shaadi app which is written that implements MVI architecture using Koin, Room, Coroutine, Retrofit, Flow, LiveData and Navigation Graph
+This repository contains Shaadi app which is written in Kotlin and implements MVI architecture using Koin, Room, Coroutine, Retrofit, Flow, LiveData and Navigation Graph
 
 <p align="center">
   <img src="https://github.com/Kiran7007/Shaadi/blob/master/screenshots/Screen_1.jpg" width="250">
